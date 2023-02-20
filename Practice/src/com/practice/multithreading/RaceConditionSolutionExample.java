@@ -2,7 +2,7 @@ package com.practice.multithreading;
 
 import java.util.Random;
 
-public class RaceConditionExample {
+public class RaceConditionSolutionExample  {
     public static void main(String[] args) throws Exception{
         RaceCondition1 rc = new RaceCondition1();
         Thread t1 = new Thread(()-> rc.modified());
@@ -16,24 +16,28 @@ public class RaceConditionExample {
     }
 
 }
-class RaceCondition{
+class RaceCondition1 {
     Random random = new Random(System.currentTimeMillis());
     int sharedVar = 0;
 
     public void printer(){
         int i = 10000;
-        while(i > 0){
-            if(sharedVar%5 == 0)
-                if(sharedVar%5  != 0)
-                    System.out.println(sharedVar);
-            i--;
+        while(i > 0) {
+            synchronized (this) {
+                if (sharedVar % 5 == 0)
+                    if (sharedVar % 5 != 0)
+                        System.out.println(sharedVar);
+                i--;
+            }
         }
     }
     public void modified(){
         int i = 10000;
         while(i > 0 ){
-            sharedVar = random.nextInt(1000);
-            i--;
+            synchronized (this){
+                sharedVar = random.nextInt(1000);
+                i--;
+            }
         }
     }
 
